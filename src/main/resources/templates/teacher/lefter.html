@@ -1,0 +1,77 @@
+<div class="left-side sticky-left-side" th:fragment="lefterBar">
+    <!--logo-->
+    <div class="logo">
+        <a th:href="@{/index.html}"><img src="/assets/images/zhxxxt.jpg" alt=""></a><br />
+    </div>
+
+    <div class="left-side-inner">
+        <!--Sidebar nav-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+
+            <li th:class="${activeUrl=='term'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-wrench"></i>
+                    <span>课程管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/term/list}">课程列表</a></li>
+                    <li><a th:href="@{/teacher/term/toAdd}">课程添加</a></li>
+                </ul>
+
+            </li>
+            <li th:class="${activeUrl=='student'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-layers"></i>
+                    <span>学生管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/student/list}">学生列表</a></li>
+                    <li><a th:href="@{/teacher/student/toAdd}">学生添加</a></li>
+                </ul>
+            </li>
+            <li th:class="${activeUrl=='course'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-note"></i>
+                    <span>知识点管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/course/list}">知识点列表</a></li>
+                    <li><a th:href="@{/teacher/course/toAdd}">知识点添加</a></li>
+                    <li><a th:href="@{/teacher/course/list-source}">知识点题库/资源添加</a></li>
+                </ul>
+            </li>
+
+
+            <li th:class="${activeUrl=='question'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-grid"></i>
+                    <span>题库管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/question/list}">题库列表</a></li>
+                    <li><a th:href="@{/teacher/question/toAdd}">题库添加</a></li>
+                </ul>
+            </li>
+
+
+            <li th:class="${activeUrl=='homework'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-envelope-open"></i>
+                    <span>课后作业</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/homework/add}">作业添加</a></li>
+                    <li><a th:href="@{/teacher/homework/list}">作业查看</a></li>
+                </ul>
+            </li>
+
+            <li th:class="${activeUrl=='discussion'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-loop"></i>
+                    <span>讨论区管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/discussion/topicList}">查看讨论区</a></li>
+                </ul>
+            </li>
+
+
+            <li th:class="${activeUrl=='message'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-film"></i>
+                    <span>消息通知管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/message/list}">通知列表</a></li>
+                    <li><a th:href="@{/teacher/message/add}">通知添加</a></li>
+                </ul>
+            </li>
+            <li th:class="${activeUrl=='exam'?'menu-list nav-active':'menu-list'}"><a href="#"><i class="icon-note"></i>
+                    <span>测试管理</span></a>
+                <ul class="sub-menu-list">
+                    <li><a th:href="@{/teacher/exam/list}">测试列表</a></li>
+                    <li><a th:href="@{/teacher/exam/toAdd}">测试添加</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+    <title>智慧学习系统</title>
+    <link href="/assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/assets/css/icons.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/responsive.css" rel="stylesheet">
+    <link href="/assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://cdn.staticfile.org/element-ui/2.13.1/theme-chalk/index.css">
+    <script src="http://cdn.staticfile.org/vue/2.6.11/vue.min.js"></script>
+    <script src="http://cdn.staticfile.org/axios/0.19.2/axios.min.js"></script>
+    <script src="http://cdn.staticfile.org/element-ui/2.13.1/index.js"></script>
+</head>
+
+<body class="sticky-header">
+    <!--引入左侧菜单栏-->
+    <div th:replace="/teacher/lefter :: lefterBar(activeUrl='exam')"></div>
+    <!-- main content start-->
+    <!-- main content start-->
+    <div class="main-content">
+        <div th:replace="/teacher/header :: headerBar"></div>
+        <!--body wrapper start-->
+        <div class="wrapper" id="app">
+            <!--Start Page Title-->
+            <div class="page-title-box">
+                <h4 class="page-title"></h4>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="#"></a>
+                    </li>
+                    <li class="active">
+                    </li>
+                </ol>
+                <div class="clearfix"></div>
+            </div>
+            <!--End Page Title-->
+
+            <!--Start row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="white-box">
+                        <h2 class="header-title">考试管理</h2>
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <div class="block">
+                                    <span class="demonstration"> 测试时间</span>
+                                    <el-date-picker v-model="examTime" type="datetimerange" range-separator="至"
+                                        start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                                <br />
+                                <div class="table-responsive">
+                                    选择课程
+                                    <el-select v-model="termId" placeholder="请选择课程">
+                                        <el-option v-for="item in termList" :label="item.name" :value="item.id"></el-option>
+                                    </el-select><br /><br />
+                                    测试名称&nbsp;<el-input style="width: 210px;" v-model="examName"></el-input>
+
+                                    <el-steps :active="active" finish-status="success">
+                                        <el-step title="步骤一：初级题目"></el-step>
+                                        <el-step title="步骤二：中级题目"></el-step>
+                                        <el-step title="步骤三：高级题目"></el-step>
+                                    </el-steps>
+
+
+
+                                    <el-table ref="multipleTable" :data="questionList" tooltip-effect="dark" style="width: 100%"
+                                        @selection-change="handleSelectionChange">
+                                        <el-table-column type="selection" width="55">
+                                        </el-table-column>
+                                        <el-table-column prop="description" label="描述" show-overflow-tooltip>
+                                        </el-table-column>
+                                        <el-table-column prop="answer" label="答案" show-overflow-tooltip>
+                                        </el-table-column>
+                                        <el-table-column prop="type" label="类型" show-overflow-tooltip>
+                                            <template slot-scope="scope">
+                                                <span v-if="scope.row.type == 1">选择</span>
+                                                <span v-if="scope.row.type == 2">判断</span>
+                                                <span v-if="scope.row.type == 3">填空</span>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+
+                                    <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End row-->
+        </div>
+        <!--End row-->
+        <div th:replace="/teacher/footer :: footerBar"></div>
+    </div>
+    <!-- End Wrapper-->
+
+    </div>
+    <!--End main content -->
+
+
+    <!--Begin core plugin -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.slimscroll.js "></script>
+    <script src="/assets/js/jquery.nicescroll.js"></script>
+    <script src="/assets/js/functions.js"></script>
+    <!-- End core plugin -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="/assets/plugins/summernote-master/summernote.min.js"></script>
+    <script src="/assets/pages/compose.js"></script>
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+
+
+    <script>
+        new Vue({
+            el: '#app',//与当前文件名保持一直
+            data: {
+                active: 0,
+                questionList: [],//题目列表
+                qids1: [],
+                qids2: [],
+                qids3: [],
+                qids: [],//真正的qids
+                termId: null,
+                termList: [],
+                examTime: [],//考试时间范围
+                examName: '',//考试名称
+            },
+            methods: {
+                //初始化
+                init() {
+
+                    // 获取课程列表
+                    this.getTermList()
+
+                    // 初始化初级试题
+                    axios.get('/api/questions?diff=' + 1).then(response => {
+                        this.questionList = response.data
+
+                    })
+                },
+                //获取课程列表
+                getTermList() {
+                    axios.get('/api/terms').then(response => {
+                        this.termList = response.data
+
+                    })
+                },
+                // 步骤条下一步
+                next() {
+                    this.active++
+                    let diff = this.active + 1
+                    if (diff > 3) diff = 3
+                    axios.get('/api/questions?diff=' + diff).then(response => {
+                        this.questionList = response.data
+
+                    })
+                    if (this.active > 2) {
+                        this.$confirm('确定添加以上试题？, 是否继续?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'success'
+                        }).then(() => {
+                            //1.添加考试
+                            let examForm = {
+                                examName: this.examName,
+                                termId: this.termId,
+                                startTime: this.examTime[0],
+                                endTime: this.examTime[1],
+                            }
+                            axios.post('/api/exam/add', examForm).then(response => {
+                                let examAddId = response.data
+                                //2.添加考试题
+                                let examQuestion = {
+                                    eid: examAddId
+                                }
+                                this.getqids()
+                                axios.post('/api/questions/add?qids=' + this.qids, examQuestion).then(response => {
+                                    //console.log(this.qids)
+                                })
+                                //3.添加考试用户
+                                axios.post('/api/exam-user/add?termId=' + this.termId + '&examId=' + examAddId).then(response => {
+                                    console.log(this.qids)
+                                })
+
+                            })
+                            this.$message({
+                                type: 'success',
+                                message: '添加成功!'
+                            });
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消添加'
+                            });
+                        });
+
+                    }
+                },
+
+                // 整合qids
+                getqids() {
+                    let index = 0;
+                    for (let i = 0; i < this.qids1.length; i++) {
+                        this.qids[index++] = this.qids1[i].id
+                    }
+                    for (let i = 0; i < this.qids2.length; i++) {
+                        this.qids[index++] = this.qids2[i].id
+                    }
+                    for (let i = 0; i < this.qids3.length; i++) {
+                        this.qids[index++] = this.qids3[i].id
+                    }
+
+                },
+
+                // 处理checkbox
+                handleSelectionChange(val) {
+                    if (this.active == 0) {
+                        this.qids1 = val;
+                    }
+                    if (this.active == 1) {
+                        this.qids2 = val;
+                    }
+                    if (this.active == 2) {
+                        this.qids3 = val;
+                    }
+
+                }
+
+            },
+            mounted() {
+                this.init();
+            }
+        });
+    </script>
+</body>
+
+</html>
