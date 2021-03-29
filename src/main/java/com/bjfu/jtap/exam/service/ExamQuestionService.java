@@ -1,6 +1,7 @@
 package com.bjfu.jtap.exam.service;
 
 import com.bjfu.jtap.entity.ExamQuestion;
+import com.bjfu.jtap.entity.ExamQuestionExample;
 import com.bjfu.jtap.entity.QuestionExample;
 import com.bjfu.jtap.entity.QuestionWithBLOBs;
 import com.bjfu.jtap.mapper.ExamQuestionMapper;
@@ -8,8 +9,7 @@ import com.bjfu.jtap.mapper.QuestionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description:
@@ -49,6 +49,33 @@ public class ExamQuestionService {
             examQuestion.setDetail(question.getDetail());
             examQuestionMapper.insertSelective(examQuestion);
         }
+    }
+
+    // 根据考试id获取考试题
+    public Map<String, List<ExamQuestion>> getExamQuestionByExamId(Integer eid) {
+        ExamQuestionExample example = new ExamQuestionExample();
+        example.createCriteria().andEidEqualTo(eid);
+        List<ExamQuestion> examQuestionList = examQuestionMapper.selectByExample(example);
+        Map<String,List<ExamQuestion>> result = new HashMap<>();
+
+        List<ExamQuestion> l1 = new ArrayList<>();
+        List<ExamQuestion> l2 = new ArrayList<>();
+        List<ExamQuestion> l3 = new ArrayList<>();
+        for(ExamQuestion eq : examQuestionList) {
+            if(eq.getDiff() == 1) {
+                l1.add(eq);
+            }
+            if(eq.getDiff() == 2) {
+                l2.add(eq);
+            }
+            if(eq.getDiff() == 3) {
+                l3.add(eq);
+            }
+        }
+        result.put("diff1",l1);
+        result.put("diff2",l2);
+        result.put("diff3",l3);
+        return result;
     }
 
 }

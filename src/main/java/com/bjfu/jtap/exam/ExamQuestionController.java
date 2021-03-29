@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description:
@@ -29,5 +30,11 @@ public class ExamQuestionController {
     @PostMapping("/questions/add")
     public void addExamQuestions(@RequestBody ExamQuestion examQuestion,Integer[] qids) {
         examQuestionService.addExamQuestion(examQuestion,qids);
+    }
+
+    // 获取分类的考试题
+    @GetMapping("/questions/map/{examId}")
+    public Map<String, List<ExamQuestion>> getExamQuestionMap(@PathVariable Integer examId) {
+        return examQuestionService.getExamQuestionByExamId(examId);
     }
 }

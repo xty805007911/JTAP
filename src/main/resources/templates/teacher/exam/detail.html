@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+    <title>智慧学习系统</title>
+    <link href="/assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/assets/css/icons.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/responsive.css" rel="stylesheet">
+    <link href="/assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://cdn.staticfile.org/element-ui/2.13.1/theme-chalk/index.css">
+    <script src="http://cdn.staticfile.org/vue/2.6.11/vue.min.js"></script>
+    <script src="http://cdn.staticfile.org/axios/0.19.2/axios.min.js"></script>
+    <script src="http://cdn.staticfile.org/element-ui/2.13.1/index.js"></script>
+</head>
+
+<body class="sticky-header">
+    <input type="hidden" id="examId" th:value="${examId}">
+    <!--引入左侧菜单栏-->
+    <div th:replace="/teacher/lefter :: lefterBar(activeUrl='exam')"></div>
+    <!-- main content start-->
+    <!-- main content start-->
+    <div class="main-content">
+        <div th:replace="/teacher/header :: headerBar"></div>
+        <!--body wrapper start-->
+        <div class="wrapper" id="app">
+            <!--Start Page Title-->
+            <div class="page-title-box">
+                <h4 class="page-title"></h4>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="#"></a>
+                    </li>
+                    <li class="active">
+                    </li>
+                </ol>
+                <div class="clearfix">{{examDetail.examName}}</div>
+            </div>
+            <!--End Page Title-->
+
+            <!--Start row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="white-box">
+                        <h2 class="header-title"></h2>
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <b>初等题目</b>
+                            </div>
+                            <div v-for="(item,i) in examQuestionList1" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br />题目答案：{{item.answer}}
+                            </div>
+                        </el-card><br/><br/>
+
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <b>中等题目</b>
+                            </div>
+                            <div v-for="(item,i) in examQuestionList2" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br />题目答案：{{item.answer}}
+                            </div>
+                        </el-card><br/><br/>
+
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <b>高等题目</b>
+                            </div>
+                            <div v-for="(item,i) in examQuestionList3" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br />题目答案：{{item.answer}}
+                            </div>
+                        </el-card>
+                    </div>
+                </div>
+            </div>
+            <!--End row-->
+        </div>
+        <!--End row-->
+        <div th:replace="/teacher/footer :: footerBar"></div>
+    </div>
+    <!-- End Wrapper-->
+
+    </div>
+    <!--End main content -->
+
+
+    <!--Begin core plugin -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.slimscroll.js "></script>
+    <script src="/assets/js/jquery.nicescroll.js"></script>
+    <script src="/assets/js/functions.js"></script>
+    <!-- End core plugin -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="/assets/plugins/summernote-master/summernote.min.js"></script>
+    <script src="/assets/pages/compose.js"></script>
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+
+
+    <script>
+        new Vue({
+            el: '#app',//与当前文件名保持一直
+            data: {
+                examId: 1,
+                examDetail: {},
+                examQuestionList1: [],
+                examQuestionList2: [],
+                examQuestionList3: [],
+            },
+            methods: {
+                //初始化
+                init() {
+                    this.examId = $("#examId").val()
+                    this.getExamDetail()
+                    this.getExamQuestionList()
+                },
+                // 获取考试list
+                getExamDetail() {
+                    axios.get('/api/exam/detail/' + this.examId).then(response => {
+                        this.examDetail = response.data
+                    })
+                },
+
+                //获取考试题
+                getExamQuestionList() {
+                    axios.get('/api/questions/map/' + this.examId).then(response => {
+                        this.examQuestionList1 = response.data.diff1
+                        this.examQuestionList2 = response.data.diff2
+                        this.examQuestionList3 = response.data.diff3
+                    })
+                }
+
+            },
+            filters: {
+                formatTimer: function (value) {
+                    let date = new Date(value);
+                    let y = date.getFullYear();
+                    let MM = date.getMonth() + 1;
+                    MM = MM < 10 ? "0" + MM : MM;
+                    let d = date.getDate();
+                    d = d < 10 ? "0" + d : d;
+                    let h = date.getHours();
+                    h = h < 10 ? "0" + h : h;
+                    let m = date.getMinutes();
+                    m = m < 10 ? "0" + m : m;
+                    let s = date.getSeconds();
+                    s = s < 10 ? "0" + s : s;
+                    return y + "-" + MM + "-" + d + " " + h + ":" + m;
+                }
+            },
+            mounted() {
+                this.init();
+            }
+        });
+    </script>
+</body>
+
+</html>

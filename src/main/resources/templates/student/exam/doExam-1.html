@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+    <title>智慧学习系统</title>
+    <link href="/assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/assets/css/icons.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/responsive.css" rel="stylesheet">
+    <link href="/assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://cdn.staticfile.org/element-ui/2.13.1/theme-chalk/index.css">
+    <script src="http://cdn.staticfile.org/vue/2.6.11/vue.min.js"></script>
+    <script src="http://cdn.staticfile.org/axios/0.19.2/axios.min.js"></script>
+    <script src="http://cdn.staticfile.org/element-ui/2.13.1/index.js"></script>
+</head>
+
+<body class="sticky-header">
+    <!--引入左侧菜单栏-->
+    <div th:replace="/student/lefter :: lefterBar(activeUrl='exam')"></div>
+    </div><input type="hidden" th:value="${eid}" id="eid">
+    <!-- main content start-->
+    <!-- main content start-->
+    <div class="main-content">
+        <div th:replace="/student/header :: headerBar"></div>
+        <!--body wrapper start-->
+        <div class="wrapper" id="app">
+            <!--Start Page Title-->
+            <div class="page-title-box">
+                <h4 class="page-title"></h4>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="#"></a>
+                    </li>
+                    <li class="active">
+                    </li>
+                </ol>
+                <div class="clearfix">
+                    <el-steps active="0" finish-status="success">
+                        <el-step title="当前位置：初级题目"></el-step>
+                        <el-step title="中级题目"></el-step>
+                        <el-step title="高级题目"></el-step>
+                    </el-steps>
+                </div>
+            </div>
+            <!--End Page Title-->
+
+            <!--Start row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="white-box">
+                        <h2 class="header-title"></h2>
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <b>初等题目</b>
+                            </div>
+                            <div v-for="(item,i) in examQuestionList" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br /><br />您的答案：
+                                <el-input v-model="userAnswerList[i]" style="width: 260px" placeholder="请输入答案"></el-input>
+                            </div>
+                            <el-button @click="toExam2" type="primary" style="float:right;">下一难度题目</el-button><br /><br />
+                        </el-card><br /><br />
+                    </div>
+                </div>
+            </div>
+            <!--End row-->
+        </div>
+        <!--End row-->
+        <div th:replace="/student/footer :: footerBar"></div>
+    </div>
+    <!-- End Wrapper-->
+
+    </div>
+    <!--End main content -->
+
+
+    <!--Begin core plugin -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.slimscroll.js "></script>
+    <script src="/assets/js/jquery.nicescroll.js"></script>
+    <script src="/assets/js/functions.js"></script>
+    <!-- End core plugin -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="/assets/plugins/summernote-master/summernote.min.js"></script>
+    <script src="/assets/pages/compose.js"></script>
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                examId: 0,
+                examQuestionList: [],
+                userAnswerList: [],
+            },
+            methods: {
+                //初始化
+                init() {
+                    this.getExamId()
+                    this.getExamQuestionList()
+                },
+                //获取当前考试id
+                getExamId() {
+                    this.examId = $("#eid").val()
+                },
+                //获取考试题
+                getExamQuestionList() {
+                    axios.get('/api/questions/map/' + this.examId).then(response => {
+                        this.examQuestionList = response.data.diff1
+                    })
+                },
+                //去下个页面
+                toExam2() {
+                    window.location.href = "/student/do-exam/1/" + this.examId
+                }
+            },
+            filters: {
+                formatTimer: function (value) {
+                    let date = new Date(value);
+                    let y = date.getFullYear();
+                    let MM = date.getMonth() + 1;
+                    MM = MM < 10 ? "0" + MM : MM;
+                    let d = date.getDate();
+                    d = d < 10 ? "0" + d : d;
+                    let h = date.getHours();
+                    h = h < 10 ? "0" + h : h;
+                    let m = date.getMinutes();
+                    m = m < 10 ? "0" + m : m;
+                    let s = date.getSeconds();
+                    s = s < 10 ? "0" + s : s;
+                    return y + "-" + MM + "-" + d + " " + h + ":" + m;
+                }
+            },
+            mounted() {
+                this.init();
+            }
+        });
+    </script>
+</body>
+
+</html>

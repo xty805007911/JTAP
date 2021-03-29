@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+    <title>智慧学习系统</title>
+    <link href="/assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="/assets/css/icons.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/responsive.css" rel="stylesheet">
+    <link href="/assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://cdn.staticfile.org/element-ui/2.13.1/theme-chalk/index.css">
+    <script src="http://cdn.staticfile.org/vue/2.6.11/vue.min.js"></script>
+    <script src="http://cdn.staticfile.org/axios/0.19.2/axios.min.js"></script>
+    <script src="http://cdn.staticfile.org/element-ui/2.13.1/index.js"></script>
+</head>
+
+<body class="sticky-header">
+    <!--引入左侧菜单栏-->
+    <div th:replace="/student/lefter :: lefterBar(activeUrl='exam')"></div><input type="hidden" th:value="${eid}" id="eid">
+    <!-- main content start-->
+    <div class="main-content">
+        <div th:replace="/student/header :: headerBar"></div>
+        <!--body wrapper start-->
+        <div class="wrapper" id="app">
+            <!--Start Page Title-->
+            <div class="page-title-box">
+                <h4 class="page-title"></h4>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="#"></a>
+                    </li>
+                    <li class="active">
+                    </li>
+                </ol>
+                <div class="clearfix"></div>
+            </div>
+            <!--End Page Title-->
+
+            <!--Start row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="white-box">
+                        <h2 class="header-title">考试须知</h2>
+                        <el-card class="box-card">
+                            <span>1．考生应认真核实准考证所列各项信息是否准确，如有问题，应在考试之前向考点确认。<br /><br /></span>
+                            <span>2．考生须持准考证和报名时使用的身份证件进入考场。<br /><br /></span>
+                            <span>3．考试当天，考生应依照准考证表明时间准时到达考场。考试正式开始后，迟到考生禁止入场。<br /><br /></span>
+                            <span>4．考生须自带蓝、黑色钢笔或签字笔。<br /><br /></span>
+                            <span>5．严禁将纸张、文字资料、通讯设备和存储器等带至座位。已带入考场的要切断电源，按照监考人员的要求放在指定地点。凡将上述设备带至座位者，一律按严重违规处理，取消其考试资格。<br /><br /></span>
+                            <span>6．考场内必须保持安静，严禁交头接耳，不得窥视他人的答题。若有作弊行为，将取消其考试资格。<br />　<br /></span>
+                            <span>7．考试期间不得提前离场。考试结束后经监考人员许可后，方可离开考场。<br />　<br /></span>
+                            <span>8．严禁将试卷、答题卡及草稿纸带出考场，违规者取消考试成绩。<br />　<br /></span>
+                            　　<el-button @click="toExam1" type="primary" style="float:right;">开始作答</el-button><br /><br />
+                        </el-card>
+                    </div>
+                </div>
+            </div>
+            <!--End row-->
+        </div>
+        <!--End row-->
+        <div th:replace="/student/footer :: footerBar"></div>
+    </div>
+    <!-- End Wrapper-->
+
+    </div>
+    <!--End main content -->
+
+
+    <!--Begin core plugin -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.slimscroll.js "></script>
+    <script src="/assets/js/jquery.nicescroll.js"></script>
+    <script src="/assets/js/functions.js"></script>
+    <!-- End core plugin -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="/assets/plugins/summernote-master/summernote.min.js"></script>
+    <script src="/assets/pages/compose.js"></script>
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                examId: 0
+            },
+            methods: {
+                //初始化
+                init() {
+                    this.getExamId()
+                },
+                //获取当前考试id
+                getExamId() {
+                    this.examId = $("#eid").val();
+                },
+                toExam1() {
+                    window.location.href = "/student/do-exam/1/" + this.examId
+                }
+            },
+            filters: {
+                formatTimer: function (value) {
+                    let date = new Date(value);
+                    let y = date.getFullYear();
+                    let MM = date.getMonth() + 1;
+                    MM = MM < 10 ? "0" + MM : MM;
+                    let d = date.getDate();
+                    d = d < 10 ? "0" + d : d;
+                    let h = date.getHours();
+                    h = h < 10 ? "0" + h : h;
+                    let m = date.getMinutes();
+                    m = m < 10 ? "0" + m : m;
+                    let s = date.getSeconds();
+                    s = s < 10 ? "0" + s : s;
+                    return y + "-" + MM + "-" + d + " " + h + ":" + m;
+                }
+            },
+            mounted() {
+                this.init();
+            }
+        });
+    </script>
+</body>
+
+</html>
