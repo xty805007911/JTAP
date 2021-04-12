@@ -43,10 +43,10 @@
                     </li>
                 </ol>
                 <div class="clearfix">
-                    <el-steps active="0" finish-status="success">
-                        <el-step title="当前位置：初级题目"></el-step>
+                    <el-steps active="2" finish-status="success">
+                        <el-step title="初级题目"></el-step>
                         <el-step title="中级题目"></el-step>
-                        <el-step title="高级题目"></el-step>
+                        <el-step title="当前位置：高级题目"></el-step>
                     </el-steps>
                 </div>
             </div>
@@ -59,13 +59,13 @@
                         <h2 class="header-title"></h2>
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <b>初等题目</b>
+                                <b>高级题目</b>
                             </div>
                             <div v-for="(item,i) in examQuestionList" :key="item.qid">
                                 <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br /><br />您的答案：
                                 <el-input v-model="userAnswerList[i]" style="width: 260px" placeholder="请输入答案"></el-input>
                             </div>
-                            <el-button @click="toExam2" type="primary" style="float:right;">下一难度题目</el-button><br /><br />
+                            <el-button @click="toExam2" type="primary" style="float:right;">交卷</el-button><br /><br />
                         </el-card><br /><br />
                     </div>
                 </div>
@@ -117,12 +117,12 @@
                 //获取考试题
                 getExamQuestionList() {
                     axios.get('/api/questions/map/' + this.examId).then(response => {
-                        this.examQuestionList = response.data.diff1
+                        this.examQuestionList = response.data.diff3
                     })
                 },
                 //去下个页面
                 toExam2() {
-                    if(this.userAnswerList.length != this.examQuestionList.length) {
+                    if (this.userAnswerList.length != this.examQuestionList.length) {
                         this.$message.error('您还有未完成的题目哦~')
                         return ;
                     }
@@ -133,11 +133,11 @@
                     */
 
                     //先保存答案
-                    axios.post('/api/exam/save-answer?userAnswerList='+this.userAnswerList, this.examQuestionList).then(response => {
+                    axios.post('/api/exam/save-answer?isEnd=1&examId=' + this.examId + '&userAnswerList=' + this.userAnswerList, this.examQuestionList).then(response => {
 
                     })
 
-                    window.location.href = "/student/do-exam/2/" + this.examId
+                    window.location.href = "/student/exam/list"
                 }
             },
             filters: {

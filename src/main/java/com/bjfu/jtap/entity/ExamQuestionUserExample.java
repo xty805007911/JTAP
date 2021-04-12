@@ -473,6 +473,126 @@ public class ExamQuestionUserExample {
             addCriterion("answer_flag not between", value1, value2, "answerFlag");
             return (Criteria) this;
         }
+
+        public Criteria andUserIdIsNull() {
+            addCriterion("user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdEqualTo(Integer value) {
+            addCriterion("user_id =", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotEqualTo(Integer value) {
+            addCriterion("user_id <>", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdGreaterThan(Integer value) {
+            addCriterion("user_id >", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("user_id >=", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLessThan(Integer value) {
+            addCriterion("user_id <", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("user_id <=", value, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIn(List<Integer> values) {
+            addCriterion("user_id in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotIn(List<Integer> values) {
+            addCriterion("user_id not in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("user_id between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("user_id not between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffIsNull() {
+            addCriterion("diff is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffIsNotNull() {
+            addCriterion("diff is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffEqualTo(Integer value) {
+            addCriterion("diff =", value, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffNotEqualTo(Integer value) {
+            addCriterion("diff <>", value, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffGreaterThan(Integer value) {
+            addCriterion("diff >", value, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffGreaterThanOrEqualTo(Integer value) {
+            addCriterion("diff >=", value, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffLessThan(Integer value) {
+            addCriterion("diff <", value, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffLessThanOrEqualTo(Integer value) {
+            addCriterion("diff <=", value, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffIn(List<Integer> values) {
+            addCriterion("diff in", values, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffNotIn(List<Integer> values) {
+            addCriterion("diff not in", values, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffBetween(Integer value1, Integer value2) {
+            addCriterion("diff between", value1, value2, "diff");
+            return (Criteria) this;
+        }
+
+        public Criteria andDiffNotBetween(Integer value1, Integer value2) {
+            addCriterion("diff not between", value1, value2, "diff");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

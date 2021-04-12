@@ -90,6 +90,11 @@
                                                 <span v-if="scope.row.type == 3">填空</span>
                                             </template>
                                         </el-table-column>
+                                        <el-table-column prop="point" label="分数" show-overflow-tooltip>
+                                            <template slot-scope="scope">
+                                                <input v-if="true" type="text" :id="'qid' + scope.row.id" value="5">
+                                            </template>
+                                        </el-table-column>
                                     </el-table>
 
                                     <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
@@ -127,6 +132,7 @@
         new Vue({
             el: '#app',//与当前文件名保持一直
             data: {
+                //id:0,
                 active: 0,
                 questionList: [],//题目列表
                 qids1: [],
@@ -137,6 +143,10 @@
                 termList: [],
                 examTime: [],//考试时间范围
                 examName: '',//考试名称
+                qidPointList: [],
+                qidPointList1: [],
+                qidPointList2: [],
+                qidPointList3: []
             },
             methods: {
                 //初始化
@@ -187,7 +197,11 @@
                                     eid: examAddId
                                 }
                                 this.getqids()
-                                axios.post('/api/questions/add?qids=' + this.qids, examQuestion).then(response => {
+                                console.log(this.qidPointList1)
+                                console.log(this.qidPointList2)
+                                console.log(this.qidPointList3)
+                                this.qidPointList = [...this.qidPointList1,...this.qidPointList2,...this.qidPointList2]
+                                axios.post('/api/questions/add?qids=' + this.qids + '&eid=' + examQuestion.eid, this.qidPointList).then(response => {
                                     //console.log(this.qids)
                                 })
                                 //3.添加考试用户
@@ -227,14 +241,42 @@
 
                 // 处理checkbox
                 handleSelectionChange(val) {
+
                     if (this.active == 0) {
                         this.qids1 = val;
+                        // 设置分数
+                        for (let i = 0; i < val.length; i++) {
+                            let qid = 'qid' + val[i].id
+                            let point = $("#" + qid).val()
+                            let qidPoint = {}
+                            qidPoint.qid = val[i].id
+                            qidPoint.point = point
+                            this.qidPointList1[i] = qidPoint
+                        }
                     }
                     if (this.active == 1) {
                         this.qids2 = val;
+                        // 设置分数
+                        for (let i = 0; i < val.length; i++) {
+                            let qid = 'qid' + val[i].id
+                            let point = $("#" + qid).val()
+                            let qidPoint = {}
+                            qidPoint.qid = val[i].id
+                            qidPoint.point = point
+                            this.qidPointList2[i] = qidPoint
+                        }
                     }
                     if (this.active == 2) {
                         this.qids3 = val;
+                        // 设置分数
+                        for (let i = 0; i < val.length; i++) {
+                            let qid = 'qid' + val[i].id
+                            let point = $("#" + qid).val()
+                            let qidPoint = {}
+                            qidPoint.qid = val[i].id
+                            qidPoint.point = point
+                            this.qidPointList3[i] = qidPoint
+                        }
                     }
 
                 }

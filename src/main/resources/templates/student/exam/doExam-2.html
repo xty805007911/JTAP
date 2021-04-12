@@ -43,9 +43,9 @@
                     </li>
                 </ol>
                 <div class="clearfix">
-                    <el-steps active="0" finish-status="success">
-                        <el-step title="当前位置：初级题目"></el-step>
-                        <el-step title="中级题目"></el-step>
+                    <el-steps active="1" finish-status="success">
+                        <el-step title="初级题目"></el-step>
+                        <el-step title="当前位置：中级题目"></el-step>
                         <el-step title="高级题目"></el-step>
                     </el-steps>
                 </div>
@@ -59,7 +59,7 @@
                         <h2 class="header-title"></h2>
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <b>初等题目</b>
+                                <b>中级题目</b>
                             </div>
                             <div v-for="(item,i) in examQuestionList" :key="item.qid">
                                 <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br /><br />您的答案：
@@ -117,7 +117,7 @@
                 //获取考试题
                 getExamQuestionList() {
                     axios.get('/api/questions/map/' + this.examId).then(response => {
-                        this.examQuestionList = response.data.diff1
+                        this.examQuestionList = response.data.diff2
                     })
                 },
                 //去下个页面
@@ -137,7 +137,7 @@
 
                     })
 
-                    window.location.href = "/student/do-exam/2/" + this.examId
+                    window.location.href = "/student/do-exam/3/" + this.examId
                 }
             },
             filters: {

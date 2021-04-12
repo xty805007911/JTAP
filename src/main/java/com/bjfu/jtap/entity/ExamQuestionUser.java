@@ -13,6 +13,10 @@ public class ExamQuestionUser {
 
     private Integer answerFlag;
 
+    private Integer userId;
+
+    private Integer diff;
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +63,21 @@ public class ExamQuestionUser {
 
     public void setAnswerFlag(Integer answerFlag) {
         this.answerFlag = answerFlag;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getDiff() {
+        return diff;
+    }
+
+    public void setDiff(Integer diff) {
+        this.diff = diff;
     }
 }

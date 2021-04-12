@@ -66,4 +66,10 @@ public class ExamRouter {
         return "student/exam/doExam-3";
     }
 
+    // 去已完成的考试页面
+    @RequestMapping("/student/exam/done")
+    public String studentDoneExamList() {
+        return "student/exam/doneList";
+    }
+
 }

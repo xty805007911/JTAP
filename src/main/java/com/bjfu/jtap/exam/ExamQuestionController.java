@@ -3,6 +3,7 @@ package com.bjfu.jtap.exam;
 import com.bjfu.jtap.entity.ExamQuestion;
 import com.bjfu.jtap.entity.QuestionWithBLOBs;
 import com.bjfu.jtap.exam.service.ExamQuestionService;
+import com.bjfu.jtap.exam.vo.QidPointVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,10 @@ public class ExamQuestionController {
 
     // 添加考试题
     @PostMapping("/questions/add")
-    public void addExamQuestions(@RequestBody ExamQuestion examQuestion,Integer[] qids) {
+    public void addExamQuestions(Integer[] qids, Integer eid, @RequestBody List<QidPointVO> qidPointList) {
+        //TODO qidPointList不准确，以qids为准，重新筛选
+        ExamQuestion examQuestion = new ExamQuestion();
+        examQuestion.setEid(eid);
         examQuestionService.addExamQuestion(examQuestion,qids);
     }
 

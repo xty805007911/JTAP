@@ -41,7 +41,9 @@
                     <li class="active">
                     </li>
                 </ol>
-                <div class="clearfix"></div>
+                <div class="clearfix">
+                    <el-button type="primary" round @click="toDoneExam">已作答试题</el-button>
+                </div>
             </div>
             <!--End Page Title-->
 
@@ -92,12 +94,36 @@
         new Vue({
             el: '#app',//与当前文件名保持一直
             data: {
-                examList: []
+                examList: [],
+                doingExam: null
             },
             methods: {
                 //初始化
                 init() {
+                    this.getDoingExam()
                     this.getExamList()
+                },
+                // 获取未完成的考试
+                getDoingExam() {
+                    axios.get('/api/exam/getDoingExam').then(response => {
+                        console.log(response.data)
+                        if (response.data != '') {
+                            this.doingExam = response.data
+                            //获取考试页
+                            let examPage = 0;
+                            axios.get('/api/exam/getDoingExam/examPage/' + this.doingExam.id).then(response => {
+                                examPage = response.data
+                            })
+                            this.$alert('您还有未完成的考试，请前往考试页面继续考试哦~', '提示', {
+                                confirmButtonText: '进入考试',
+                                showClose: false,
+                                callback: action => {
+                                    window.location.href = "/student/do-exam/" + examPage + "/" + this.doingExam.id
+                                }
+                            });
+                        }
+
+                    })
                 },
                 // 获取考试list
                 getExamList() {
@@ -137,6 +163,10 @@
                     })
 
 
+                },
+                // 去已完成作答的页面
+                toDoneExam() {
+                    window.location.href = "/student/exam/done/"
                 }
             },
             filters: {
