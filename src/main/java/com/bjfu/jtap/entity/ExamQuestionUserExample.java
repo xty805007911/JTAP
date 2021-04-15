@@ -593,6 +593,66 @@ public class ExamQuestionUserExample {
             addCriterion("diff not between", value1, value2, "diff");
             return (Criteria) this;
         }
+
+        public Criteria andPointIsNull() {
+            addCriterion("point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIsNotNull() {
+            addCriterion("point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointEqualTo(Float value) {
+            addCriterion("point =", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointNotEqualTo(Float value) {
+            addCriterion("point <>", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointGreaterThan(Float value) {
+            addCriterion("point >", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointGreaterThanOrEqualTo(Float value) {
+            addCriterion("point >=", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointLessThan(Float value) {
+            addCriterion("point <", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointLessThanOrEqualTo(Float value) {
+            addCriterion("point <=", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIn(List<Float> values) {
+            addCriterion("point in", values, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointNotIn(List<Float> values) {
+            addCriterion("point not in", values, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointBetween(Float value1, Float value2) {
+            addCriterion("point between", value1, value2, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointNotBetween(Float value1, Float value2) {
+            addCriterion("point not between", value1, value2, "point");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

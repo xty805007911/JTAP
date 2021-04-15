@@ -12,6 +12,15 @@ public class AnswerSaveVO {
     private String answer;
     private Integer diff;
     private Integer type;
+    private Float point;
+
+    public Float getPoint() {
+        return point;
+    }
+
+    public void setPoint(Float point) {
+        this.point = point;
+    }
 
     public Integer getId() {
         return id;

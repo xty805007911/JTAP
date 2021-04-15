@@ -200,7 +200,7 @@
                                 console.log(this.qidPointList1)
                                 console.log(this.qidPointList2)
                                 console.log(this.qidPointList3)
-                                this.qidPointList = [...this.qidPointList1,...this.qidPointList2,...this.qidPointList2]
+                                this.qidPointList = [...this.qidPointList1, ...this.qidPointList2, ...this.qidPointList3]
                                 axios.post('/api/questions/add?qids=' + this.qids + '&eid=' + examQuestion.eid, this.qidPointList).then(response => {
                                     //console.log(this.qids)
                                 })

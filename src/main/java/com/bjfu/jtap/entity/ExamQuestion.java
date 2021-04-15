@@ -17,6 +17,8 @@ public class ExamQuestion {
 
     private Integer diff;
 
+    private Float point;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class ExamQuestion {
 
     public void setDiff(Integer diff) {
         this.diff = diff;
+    }
+
+    public Float getPoint() {
+        return point;
+    }
+
+    public void setPoint(Float point) {
+        this.point = point;
     }
 }

@@ -32,13 +32,13 @@ public class ExamQuestionService {
     }
 
     // 添加考试题
-    public void addExamQuestion(ExamQuestion examQuestion,Integer[] qids) {
+    public void addExamQuestion(ExamQuestion examQuestion, Integer[] qids, Map<Integer, Float> pointMap) {
         List<Integer> qidList = Arrays.asList(qids);
         Integer eid = examQuestion.getEid();
         QuestionExample example = new QuestionExample();
         example.createCriteria().andIdIn(qidList);
         List<QuestionWithBLOBs> questions = questionMapper.selectByExampleWithBLOBs(example);
-        for(QuestionWithBLOBs question : questions) {
+        for (QuestionWithBLOBs question : questions) {
             examQuestion = new ExamQuestion();
             examQuestion.setEid(eid);
             examQuestion.setAnswer(question.getAnswer());
@@ -47,6 +47,7 @@ public class ExamQuestionService {
             examQuestion.setQid(question.getId());
             examQuestion.setType(question.getType());
             examQuestion.setDetail(question.getDetail());
+            examQuestion.setPoint(pointMap.get(question.getId()));
             examQuestionMapper.insertSelective(examQuestion);
         }
     }
@@ -56,25 +57,25 @@ public class ExamQuestionService {
         ExamQuestionExample example = new ExamQuestionExample();
         example.createCriteria().andEidEqualTo(eid);
         List<ExamQuestion> examQuestionList = examQuestionMapper.selectByExample(example);
-        Map<String,List<ExamQuestion>> result = new HashMap<>();
+        Map<String, List<ExamQuestion>> result = new HashMap<>();
 
         List<ExamQuestion> l1 = new ArrayList<>();
         List<ExamQuestion> l2 = new ArrayList<>();
         List<ExamQuestion> l3 = new ArrayList<>();
-        for(ExamQuestion eq : examQuestionList) {
-            if(eq.getDiff() == 1) {
+        for (ExamQuestion eq : examQuestionList) {
+            if (eq.getDiff() == 1) {
                 l1.add(eq);
             }
-            if(eq.getDiff() == 2) {
+            if (eq.getDiff() == 2) {
                 l2.add(eq);
             }
-            if(eq.getDiff() == 3) {
+            if (eq.getDiff() == 3) {
                 l3.add(eq);
             }
         }
-        result.put("diff1",l1);
-        result.put("diff2",l2);
-        result.put("diff3",l3);
+        result.put("diff1", l1);
+        result.put("diff2", l2);
+        result.put("diff3", l3);
         return result;
     }
 

@@ -10,6 +10,7 @@
     <result column="answer" property="answer" jdbcType="VARCHAR" />
     <result column="detail" property="detail" jdbcType="VARCHAR" />
     <result column="diff" property="diff" jdbcType="INTEGER" />
+    <result column="point" property="point" jdbcType="REAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, eid, qid, description, type, answer, detail, diff
+    id, eid, qid, description, type, answer, detail, diff, point
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bjfu.jtap.entity.ExamQuestionExample" >
     select
@@ -105,10 +106,10 @@
   <insert id="insert" parameterType="com.bjfu.jtap.entity.ExamQuestion" >
     insert into exam_question (id, eid, qid, 
       description, type, answer, 
-      detail, diff)
+      detail, diff, point)
     values (#{id,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{qid,jdbcType=INTEGER}, 
       #{description,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{answer,jdbcType=VARCHAR}, 
-      #{detail,jdbcType=VARCHAR}, #{diff,jdbcType=INTEGER})
+      #{detail,jdbcType=VARCHAR}, #{diff,jdbcType=INTEGER}, #{point,jdbcType=REAL})
   </insert>
   <insert id="insertSelective" parameterType="com.bjfu.jtap.entity.ExamQuestion" >
     insert into exam_question
@@ -137,6 +138,9 @@
       <if test="diff != null" >
         diff,
       </if>
+      <if test="point != null" >
+        point,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -162,6 +166,9 @@
       </if>
       <if test="diff != null" >
         #{diff,jdbcType=INTEGER},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=REAL},
       </if>
     </trim>
   </insert>
@@ -198,6 +205,9 @@
       <if test="record.diff != null" >
         diff = #{record.diff,jdbcType=INTEGER},
       </if>
+      <if test="record.point != null" >
+        point = #{record.point,jdbcType=REAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -212,7 +222,8 @@
       type = #{record.type,jdbcType=INTEGER},
       answer = #{record.answer,jdbcType=VARCHAR},
       detail = #{record.detail,jdbcType=VARCHAR},
-      diff = #{record.diff,jdbcType=INTEGER}
+      diff = #{record.diff,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=REAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -241,6 +252,9 @@
       <if test="diff != null" >
         diff = #{diff,jdbcType=INTEGER},
       </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=REAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -252,7 +266,8 @@
       type = #{type,jdbcType=INTEGER},
       answer = #{answer,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR},
-      diff = #{diff,jdbcType=INTEGER}
+      diff = #{diff,jdbcType=INTEGER},
+      point = #{point,jdbcType=REAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

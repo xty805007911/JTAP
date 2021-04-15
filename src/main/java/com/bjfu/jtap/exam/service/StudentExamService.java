@@ -95,8 +95,10 @@ public class StudentExamService {
             entity.setUserAnswer(userAnswer);
             if (answer.trim().toLowerCase().equals(userAnswer.trim().toLowerCase())) {
                 entity.setAnswerFlag(1);
+                entity.setPoint(vo.getPoint());
             } else {
                 entity.setAnswerFlag(0);
+                entity.setPoint(0F);
             }
             examQuestionUserMapper.insertSelective(entity);
         }
