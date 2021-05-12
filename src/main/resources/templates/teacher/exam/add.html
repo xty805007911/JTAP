@@ -183,6 +183,23 @@
                             cancelButtonText: '取消',
                             type: 'success'
                         }).then(() => {
+                            if (this.qidPointList1.length === 0 && this.qidPointList2.length === 0 && this.qidPointList3.length === 0) {
+                                this.$message("未选择任何考试题目");
+                                return;
+                            }
+                            if (this.examName === '') {
+                                this.$message("未填写考试名称");
+                                return;
+                            }
+                            if (this.termId === null) {
+                                this.$message("未选择课程");
+                                return;
+                            }
+                            if (this.examTime.length === 0) {
+                                this.$message("未选择考试时间");
+                                return;
+                            }
+
                             //1.添加考试
                             let examForm = {
                                 examName: this.examName,

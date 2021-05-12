@@ -4,6 +4,7 @@ import com.bjfu.jtap.entity.Exam;
 import com.bjfu.jtap.entity.User;
 import com.bjfu.jtap.exam.service.StudentExamService;
 import com.bjfu.jtap.exam.vo.AnswerSaveVO;
+import com.bjfu.jtap.exam.vo.ExamVO;
 import com.bjfu.jtap.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -72,8 +73,10 @@ public class StudentExamController {
     }
 
     // 获取已完成的考试
-    /*
     @GetMapping("/exam/done")
-    public List<>
-    */
+    public List<ExamVO> getDoneExam(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        return studentExamService.getDoneExam(user.getId());
+    }
+
 }

@@ -25,6 +25,7 @@
 <body class="sticky-header">
     <!--引入左侧菜单栏-->
     <div th:replace="/teacher/lefter :: lefterBar(activeUrl='exam')"></div>
+    <input type="hidden" id="examId" th:value="${examId}">
     <!-- main content start-->
     <!-- main content start-->
     <div class="main-content">
@@ -47,22 +48,21 @@
 
             <!--Start row-->
             <div class="row">
-                <div class="col-md-4" v-for="item in examList" :key="item.id">
+                <div class="col-md-12">
                     <div class="white-box">
-                        <h2 class="header-title">考试id:{{item.id}}</h2>
-                        <el-card class="box-card">
-                            <div slot="header" class="clearfix">
-                                <span>{{item.examName}}</span>
-                                <el-button style="float: right; padding: 3px 0" type="text" @click="toDetail(item.id)">试题详情</el-button>
-                                
-                            </div>
-                            <div>
-                                考试创建时间：{{item.createTime | formatTimer}}<br />
-                                考试开始时间：{{item.startTime | formatTimer}}<br />
-                                考试开始时间：{{item.endTime | formatTimer}}<br />
-                                <el-button style="float: right; padding: 3px 0" type="text" @click="toExamDetail(item.id)">考试详情</el-button>
-                            </div>
-                        </el-card>
+                        <el-table :data="tableData" stripe style="width: 100%">
+                            <el-table-column prop="userName" label="考生姓名" width="180">
+                            </el-table-column>
+                            <el-table-column prop="point" label="得分" width="180">
+                            </el-table-column>
+                            <el-table-column prop="status" label="考试状态" width="180">
+                            </el-table-column>
+                            <el-table-column label="操作" width="100">
+                                <template slot-scope="scope">
+                                    <el-button @click="toDetail(scope.row.userId)" type="text" size="small">详情</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </div>
                 </div>
             </div>
@@ -92,44 +92,21 @@
 
     <script>
         new Vue({
-            el: '#app',//与当前文件名保持一直
+            el: '#app',
             data: {
-                examList: []
+                examId: 0,
+                tableData: []
             },
             methods: {
-                //初始化
                 init() {
-                    this.getExamList()
-                },
-                // 获取考试list
-                getExamList() {
-                    axios.get('/api/exam/list').then(response => {
-                        this.examList = response.data
+                    this.examId = $("#examId").val()
+                    axios.get('/api/exam-user/exam-list/' + this.examId).then(response => {
+                        this.tableData = response.data
                     })
                 },
-                //去详情页面
-                toDetail(eid) {
-                    window.location.href = "/teacher/exam/" + eid
-                },
-                toExamDetail(eid) {
-                    window.location.href = "/teacher/studentExam/" + eid
-                }
-            },
-            filters: {
-                formatTimer: function (value) {
-                    let date = new Date(value);
-                    let y = date.getFullYear();
-                    let MM = date.getMonth() + 1;
-                    MM = MM < 10 ? "0" + MM : MM;
-                    let d = date.getDate();
-                    d = d < 10 ? "0" + d : d;
-                    let h = date.getHours();
-                    h = h < 10 ? "0" + h : h;
-                    let m = date.getMinutes();
-                    m = m < 10 ? "0" + m : m;
-                    let s = date.getSeconds();
-                    s = s < 10 ? "0" + s : s;
-                    return y + "-" + MM + "-" + d + " " + h + ":" + m;
+                toDetail(userId) {
+                    window.location.href = "/teacher/exam/detail?examId=" + this.examId + "&userId=" + userId
+
                 }
             },
             mounted() {

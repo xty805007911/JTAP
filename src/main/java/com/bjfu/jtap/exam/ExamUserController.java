@@ -1,10 +1,11 @@
 package com.bjfu.jtap.exam;
 
 import com.bjfu.jtap.exam.service.ExamUserService;
+import com.bjfu.jtap.exam.vo.ExamUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -20,5 +21,11 @@ public class ExamUserController {
     @PostMapping("/exam-user/add")
     public void addExamUser(Integer termId,Integer examId) {
         examUserService.addExamUser(termId,examId);
+    }
+
+    // 获取考试用户列表
+    @GetMapping("/exam-user/exam-list/{examId}")
+    public List<ExamUserVO> getExamList(@PathVariable Integer examId) {
+        return examUserService.getExamUserList(examId);
     }
 }

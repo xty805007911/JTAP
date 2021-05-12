@@ -2,11 +2,15 @@ package com.bjfu.jtap.exam;
 
 import com.bjfu.jtap.entity.ExamQuestion;
 import com.bjfu.jtap.entity.QuestionWithBLOBs;
+import com.bjfu.jtap.entity.User;
 import com.bjfu.jtap.exam.service.ExamQuestionService;
+import com.bjfu.jtap.exam.vo.ExamQuestionVO;
 import com.bjfu.jtap.exam.vo.QidPointVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,5 +54,16 @@ public class ExamQuestionController {
     @GetMapping("/questions/map/{examId}")
     public Map<String, List<ExamQuestion>> getExamQuestionMap(@PathVariable Integer examId) {
         return examQuestionService.getExamQuestionByExamId(examId);
+    }
+
+    // 获取用户考试详情
+    @GetMapping("/question/user/map/{examId}")
+    public Map<String, List<ExamQuestionVO>> getExamQuestionUserMap(@PathVariable Integer examId, Integer userId, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if(user.getRole() == 2) {
+            // 如果是学生，则将userId为当前的登录用户id，学生只能查询自己的成绩
+            userId = user.getId();
+        }
+        return examQuestionService.getExamQuestionByUserExamId(examId,userId);
     }
 }

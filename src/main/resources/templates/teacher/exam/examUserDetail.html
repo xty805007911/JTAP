@@ -23,6 +23,7 @@
 </head>
 
 <body class="sticky-header">
+    <input type="hidden" id="examId" th:value="${examId}">
     <!--引入左侧菜单栏-->
     <div th:replace="/teacher/lefter :: lefterBar(activeUrl='exam')"></div>
     <!-- main content start-->
@@ -41,26 +42,45 @@
                     <li class="active">
                     </li>
                 </ol>
-                <div class="clearfix"></div>
+                <div class="clearfix">学生总得分：{{point}}</div>
             </div>
             <!--End Page Title-->
 
             <!--Start row-->
             <div class="row">
-                <div class="col-md-4" v-for="item in examList" :key="item.id">
+                <div class="col-md-12">
                     <div class="white-box">
-                        <h2 class="header-title">考试id:{{item.id}}</h2>
+                        <h2 class="header-title"></h2>
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>{{item.examName}}</span>
-                                <el-button style="float: right; padding: 3px 0" type="text" @click="toDetail(item.id)">试题详情</el-button>
-                                
+                                <b>初等题目</b>
                             </div>
-                            <div>
-                                考试创建时间：{{item.createTime | formatTimer}}<br />
-                                考试开始时间：{{item.startTime | formatTimer}}<br />
-                                考试开始时间：{{item.endTime | formatTimer}}<br />
-                                <el-button style="float: right; padding: 3px 0" type="text" @click="toExamDetail(item.id)">考试详情</el-button>
+                            <div v-for="(item,i) in examQuestionList1" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br />题目答案：{{item.answer}}<br />
+                                学生答案：{{item.examQuestionUser.userAnswer}}
+                                <br />题目得分：{{item.examQuestionUser.point}}
+                            </div>
+                        </el-card><br /><br />
+
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <b>中等题目</b>
+                            </div>
+                            <div v-for="(item,i) in examQuestionList2" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br />题目答案：{{item.answer}}<br />
+                                学生答案：{{item.examQuestionUser.userAnswer}}
+                                <br />题目得分：{{item.examQuestionUser.point}}
+                            </div>
+                        </el-card><br /><br />
+
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <b>高等题目</b>
+                            </div>
+                            <div v-for="(item,i) in examQuestionList3" :key="item.qid">
+                                <b><br />第{{i+1}}题：<br /></b>题目描述：{{item.description}}<br />题目答案：{{item.answer}}<br />
+                                学生答案：{{item.examQuestionUser.userAnswer}}
+                                <br />题目得分：{{item.examQuestionUser.point}}
                             </div>
                         </el-card>
                     </div>
@@ -75,7 +95,6 @@
 
     </div>
     <!--End main content -->
-
 
     <!--Begin core plugin -->
     <script src="/assets/js/jquery.min.js"></script>
@@ -92,48 +111,41 @@
 
     <script>
         new Vue({
-            el: '#app',//与当前文件名保持一直
+            el: '#app',
             data: {
-                examList: []
+                examId: 0,
+                examQuestionList1: [],
+                examQuestionList2: [],
+                examQuestionList3: [],
+                point: 0
             },
             methods: {
-                //初始化
                 init() {
-                    this.getExamList()
+                    this.examId = $("#examId").val()
                 },
-                // 获取考试list
-                getExamList() {
-                    axios.get('/api/exam/list').then(response => {
-                        this.examList = response.data
+                getExamDetail() {
+                    axios.get('/api/question/user/map/' + this.examId).then(response => {
+                        this.examQuestionList1 = response.data.diff1
+                        this.examQuestionList2 = response.data.diff2
+                        this.examQuestionList3 = response.data.diff3
+
+                        // 计算总得分
+                        this.examQuestionList1.forEach(e => {
+                            this.point += e.examQuestionUser.point
+                        });
+                        this.examQuestionList2.forEach(e => {
+                            this.point += e.examQuestionUser.point
+                        });
+                        this.examQuestionList3.forEach(e => {
+                            this.point += e.examQuestionUser.point
+                        });
+
                     })
-                },
-                //去详情页面
-                toDetail(eid) {
-                    window.location.href = "/teacher/exam/" + eid
-                },
-                toExamDetail(eid) {
-                    window.location.href = "/teacher/studentExam/" + eid
-                }
-            },
-            filters: {
-                formatTimer: function (value) {
-                    let date = new Date(value);
-                    let y = date.getFullYear();
-                    let MM = date.getMonth() + 1;
-                    MM = MM < 10 ? "0" + MM : MM;
-                    let d = date.getDate();
-                    d = d < 10 ? "0" + d : d;
-                    let h = date.getHours();
-                    h = h < 10 ? "0" + h : h;
-                    let m = date.getMinutes();
-                    m = m < 10 ? "0" + m : m;
-                    let s = date.getSeconds();
-                    s = s < 10 ? "0" + s : s;
-                    return y + "-" + MM + "-" + d + " " + h + ":" + m;
                 }
             },
             mounted() {
-                this.init();
+                this.init()
+                this.getExamDetail()
             }
         });
     </script>

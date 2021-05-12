@@ -2,6 +2,7 @@ package com.bjfu.jtap.exam.service;
 
 import com.bjfu.jtap.entity.*;
 import com.bjfu.jtap.exam.vo.AnswerSaveVO;
+import com.bjfu.jtap.exam.vo.ExamVO;
 import com.bjfu.jtap.mapper.ExamMapper;
 import com.bjfu.jtap.mapper.ExamQuestionUserMapper;
 import com.bjfu.jtap.mapper.ExamUserMapper;
@@ -118,16 +119,47 @@ public class StudentExamService {
     }
 
     // 获取未完成的考试页面
-    public Integer getDoingExamPage(Integer userId,Integer eid) {
+    public Integer getDoingExamPage(Integer userId, Integer eid) {
         ExamQuestionUserExample example = new ExamQuestionUserExample();
         example.setOrderByClause(" diff DESC");
         example.createCriteria().andUserIdEqualTo(userId).andEidEqualTo(eid);
         List<ExamQuestionUser> examQuestionUsers = examQuestionUserMapper.selectByExample(example);
-        if(!CollectionUtils.isEmpty(examQuestionUsers)) {
+        if (!CollectionUtils.isEmpty(examQuestionUsers)) {
             return examQuestionUsers.get(0).getDiff() + 1;
-        }else {
+        } else {
             return 0;
         }
+    }
 
+    // 获取已经完成的考试
+    public List<ExamVO> getDoneExam(Integer userId) {
+
+        //获取enttime不为空的
+        ExamUserExample examUserExample = new ExamUserExample();
+        examUserExample.createCriteria().andUserIdEqualTo(userId).andCreateTimeIsNotNull().andEntTimeIsNotNull();
+        List<ExamUser> examUserList = examUserMapper.selectByExample(examUserExample);
+        if (CollectionUtils.isEmpty(examUserList)) {
+            return null;
+        }
+        List<ExamVO> resultList = new ArrayList<>();
+        for (ExamUser eu : examUserList) {
+            Integer eid = eu.getExamId();
+            Exam exam = examMapper.selectByPrimaryKey(eid);
+            ExamQuestionUserExample examQuestionUserExample = new ExamQuestionUserExample();
+            examQuestionUserExample.createCriteria().andUserIdEqualTo(userId).andEidEqualTo(eid);
+            List<ExamQuestionUser> examQuestionUserList = examQuestionUserMapper.selectByExample(examQuestionUserExample);
+            Float point = 0F;
+            if(!CollectionUtils.isEmpty(examQuestionUserList)) {
+                for(ExamQuestionUser equ : examQuestionUserList) {
+                    point+=equ.getPoint();
+                }
+            }
+            ExamVO vo = new ExamVO();
+            vo.setExamId(eid);
+            vo.setExamName(exam.getExamName());
+            vo.setPoint(point);
+            resultList.add(vo);
+        }
+        return resultList;
     }
 }

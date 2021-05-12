@@ -32,6 +32,20 @@ public class ExamRouter {
         return "teacher/exam/detail";
     }
 
+    //管理员去学生考试详情列表
+    @RequestMapping("/teacher/studentExam/{id}")
+    public String adminToStudentExamDetail(@PathVariable Integer id, HttpServletRequest request) {
+        request.setAttribute("examId", id);
+        return "teacher/exam/studentExamList";
+    }
+
+    // 去考试详情页面
+    @RequestMapping("/teacher/exam/detail")
+    public String adminToExamUserDetail(Integer examId, HttpServletRequest request) {
+        request.setAttribute("examId", examId);
+        return "teacher/exam/examUserdetail";
+    }
+
     //学生去考试列表
     @RequestMapping("/student/exam/list")
     public String studentToExamList() {
@@ -70,6 +84,13 @@ public class ExamRouter {
     @RequestMapping("/student/exam/done")
     public String studentDoneExamList() {
         return "student/exam/doneList";
+    }
+
+    // 去考试详情页面
+    @RequestMapping("/student/exam/detail")
+    public String toExamDetail(Integer examId, HttpServletRequest request) {
+        request.setAttribute("examId", examId);
+        return "student/exam/detail";
     }
 
 }

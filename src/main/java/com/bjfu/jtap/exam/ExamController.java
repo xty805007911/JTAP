@@ -48,4 +48,5 @@ public class ExamController {
     public Exam getExamDetail(@PathVariable Integer id) {
         return examService.getById(id);
     }
+
 }
